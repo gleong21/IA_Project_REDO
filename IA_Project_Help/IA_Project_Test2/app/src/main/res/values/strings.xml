@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">IA_Project_Test</string>
+
+    <string-array name="type">
+        <item>Select a Type</item>
+        <item>Subscription</item>
+        <item>Bills</item>
+    </string-array>
+
+    <string-array name="paymentPeriod">
+        <item>Payment Period?</item>
+        <item>Monthly</item>
+        <item>Quarterly</item>
+        <item>Yearly</item>
+    </string-array>
+</resources>
