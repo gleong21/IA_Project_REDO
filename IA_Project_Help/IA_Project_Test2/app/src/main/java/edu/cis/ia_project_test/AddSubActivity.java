@@ -2,6 +2,8 @@ package edu.cis.ia_project_test;
 
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -14,6 +16,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.DialogFragment;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -47,6 +51,7 @@ public class AddSubActivity extends AppCompatActivity implements DatePickerDialo
     public FirebaseFirestore firestoreRef;
     ArrayList<Payments> secondArrayPay;
     ArrayList<Payments> paymentsList;
+    private NotificationManagerCompat notificationManager;
 
 
     int curNum = 0;
@@ -57,7 +62,7 @@ public class AddSubActivity extends AppCompatActivity implements DatePickerDialo
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_sub);
-
+        notificationManager = NotificationManagerCompat.from(this);
         name = findViewById(R.id.name);
         amount = findViewById(R.id.amount);
         firestoreRef = FirebaseFirestore.getInstance();
@@ -140,11 +145,6 @@ public class AddSubActivity extends AppCompatActivity implements DatePickerDialo
                         }
                     }
                 });
-
-
-
-
-
 
 
 
@@ -234,10 +234,20 @@ public class AddSubActivity extends AppCompatActivity implements DatePickerDialo
         String currentDay = DateFormat.getDateInstance(DateFormat.FULL).format(calOne.getTime());
         TextView textView = findViewById(R.id.textView4);
         textView.setText(currentDay);
+        notifTest(calOne);
     }
 
     public void notifTest(Calendar calendar)
     {
-        AlarmManager alarm = new
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, AlertReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
+        if (calendar.before(Calendar.getInstance())) {
+            calendar.add(Calendar.DATE, 1);
+        }
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
     }
+
+
 }

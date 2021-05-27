@@ -29,8 +29,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import static android.content.ContentValues.TAG;
-
 
 public class authActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, AdapterView.OnItemSelectedListener
 
@@ -79,7 +77,7 @@ public class authActivity extends AppCompatActivity implements GoogleApiClient.O
             }
         });
 
-        textOne = findViewById(R.id.textView);
+        textOne = findViewById(R.id.textView7);
         textOne.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
