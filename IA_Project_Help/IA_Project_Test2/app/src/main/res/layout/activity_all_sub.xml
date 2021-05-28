@@ -9,8 +9,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recviewOne"
-        android:layout_width="349dp"
-        android:layout_height="584dp"
+        android:layout_width="399dp"
+        android:layout_height="648dp"
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toTopOf="@+id/bottomNav"
         app:layout_constraintEnd_toEndOf="parent"

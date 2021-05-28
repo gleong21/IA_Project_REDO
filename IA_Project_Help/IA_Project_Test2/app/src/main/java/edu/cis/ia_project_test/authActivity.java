@@ -215,7 +215,7 @@ public class authActivity extends AppCompatActivity implements GoogleApiClient.O
     {
         if (currentUser != null)
         {
-            Intent intent = new Intent(this, TypeActivity.class);
+            Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
 
         }
@@ -226,7 +226,7 @@ public class authActivity extends AppCompatActivity implements GoogleApiClient.O
     {
         if (currentUser != null)
         {
-            Intent intent = new Intent(this, TypeActivity.class);
+            Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
 
         }

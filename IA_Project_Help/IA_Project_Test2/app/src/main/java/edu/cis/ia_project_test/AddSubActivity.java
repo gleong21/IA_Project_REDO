@@ -188,8 +188,29 @@ public class AddSubActivity extends AppCompatActivity implements DatePickerDialo
             Payments paymentOne = new Payments("payment" + curNum, name.getText().toString(), amount.getText().toString(), yearOne, monthOne, dateOne);
             curNum++;
 
-            paymentsList.add(paymentOne);
-            firestoreRef.collection("Users").document(mAuth.getUid()).update("payments", paymentsList);
+            if(paymentsList == null)
+            {
+                paymentsList = new ArrayList<>();
+                firestoreRef.collection("Users").document(mAuth.getUid()).update("payments", paymentsList);
+
+                Toast messageToUser = Toast.makeText(this, "Success",
+                        Toast.LENGTH_LONG);
+                messageToUser.show();
+                gotoAll();
+
+            }
+
+            else
+            {
+                paymentsList.add(paymentOne);
+                firestoreRef.collection("Users").document(mAuth.getUid()).update("payments", paymentsList);
+                Toast messageToUser = Toast.makeText(this, "Success",
+                        Toast.LENGTH_LONG);
+                messageToUser.show();
+                gotoAll();
+
+            }
+
         }
 
 
@@ -204,7 +225,7 @@ public class AddSubActivity extends AppCompatActivity implements DatePickerDialo
         return false;
     }
 
-    public void gotoAll(View v)
+    public void gotoAll()
     {
         Intent intent = new Intent(this, allSubActivity.class);
 
@@ -213,8 +234,14 @@ public class AddSubActivity extends AppCompatActivity implements DatePickerDialo
 
     public void updateArrayList(ArrayList<Payments> newOne)
     {
-        paymentsList = new ArrayList<>();
-        paymentsList = newOne;
+        if(newOne == null)
+        {
+            paymentsList = new ArrayList<>();
+        }
+        else
+        {
+            paymentsList = newOne;
+        }
     }
 
 

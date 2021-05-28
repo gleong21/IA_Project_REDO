@@ -1,6 +1,8 @@
 package edu.cis.ia_project_test;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -77,6 +80,31 @@ public class allSubActivity extends AppCompatActivity
                     }
                 });
         System.out.println(mAuth.getUid() + "YEEEEEEWEWEEEEEE");
+
+        BottomNavigationView botView = findViewById(R.id.bottomNav);
+        botView.setSelectedItemId(R.id.add);
+
+        botView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener()
+        {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item)
+            {
+                switch (item.getItemId())
+                {
+                    case R.id.home:
+                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                        overridePendingTransition(0,0);
+                        return true;
+                    case R.id.add:
+                        startActivity(new Intent(getApplicationContext(), TypeActivity.class));
+                        overridePendingTransition(0,0);
+                        return true;
+                    case R.id.list:
+                        return true;
+                }
+                return false;
+            }
+        });
     }
 
     public void createRecview()
@@ -90,8 +118,15 @@ public class allSubActivity extends AppCompatActivity
 
     public void updateArrayList(ArrayList<Payments> newOne)
     {
-        payments = new ArrayList<>();
-        payments = newOne;
+        if(newOne == null)
+        {
+            payments = new ArrayList<>();
+        }
+        else
+        {
+            payments = newOne;
+        }
+
     }
 
     public boolean checkUser(String id)
