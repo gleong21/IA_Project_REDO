@@ -80,6 +80,7 @@ public class allSubActivity extends AppCompatActivity
                     }
                 });
         System.out.println(mAuth.getUid() + "YEEEEEEWEWEEEEEE");
+        System.out.println(payments);
 
         BottomNavigationView botView = findViewById(R.id.bottomNav);
         botView.setSelectedItemId(R.id.add);

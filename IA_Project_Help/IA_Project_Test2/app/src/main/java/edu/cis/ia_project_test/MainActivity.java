@@ -1,11 +1,17 @@
 package edu.cis.ia_project_test;
 
+import android.Manifest;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -14,9 +20,12 @@ import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -26,11 +35,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import org.w3c.dom.Text;
-
+import java.io.IOException;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener
 {
@@ -41,16 +51,74 @@ public class MainActivity extends AppCompatActivity implements TimePickerDialog.
     private FirebaseUser mUser;
     ArrayList<User> userList;
     ArrayList<Payments> payments;
+    Button location;
+    TextView textView1, textView2, textView3, textView4, textView5, textView6;
+    FusedLocationProviderClient fusedLocationProviderClient;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-
-
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         BottomNavigationView botView = findViewById(R.id.bottomNav);
         botView.setSelectedItemId(R.id.add);
+        location = findViewById(R.id.button6);
+        textView1 = findViewById(R.id.testingOne);
+        textView2 = findViewById(R.id.testingTwo);
+        textView3 = findViewById(R.id.testingThree);
+        textView4 = findViewById(R.id.testingFour);
+        textView5 = findViewById(R.id.testingFive);
+        textView6 = findViewById(R.id.textView6);
+
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        location.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                if(ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+                {
+
+                    fusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>()
+                    {
+                        @Override
+                        public void onComplete(@NonNull Task<Location> task)
+                        {
+                            Location location = task.getResult();
+                            if (location != null)
+                            {
+                                System.out.println("YEET");
+
+                                Geocoder geocoder = new Geocoder(MainActivity.this, Locale.getDefault());
+                                try
+                                {
+                                    List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                                    System.out.println(addresses.get(0).getCountryName());
+                                    textView6.setText("hello");
+                                    textView1.setText(Html.fromHtml("<font color = '#6200EE'><b>Latitude :</b><br></font>"+ (addresses.get(0).getLatitude())));
+                                    textView2.setText(Html.fromHtml("<font color = '#6200EE'><b>Longitude :</b><br></font>"+ String.valueOf(addresses.get(0).getLongitude())));
+                                    textView3.setText(Html.fromHtml("<font color = '#6200EE'><b>Country Name :</b><br></font>"+ String.valueOf(addresses.get(0).getCountryName())));
+                                    textView4.setText(Html.fromHtml("<font color = '#6200EE'><b>Locality :</b><br></font>"+ String.valueOf(addresses.get(0).getLocality())));
+                                    textView5.setText(Html.fromHtml("<font color = '#6200EE'><b>Address :</b><br></font>"+ String.valueOf(addresses.get(0).getAddressLine(0))));
+
+
+                                } catch (IOException e)
+                                {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    });
+                }
+                else
+                {
+                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
+
+                }
+            }
+        });
+
+
         mAuth = FirebaseAuth.getInstance();
 
 
@@ -199,6 +267,7 @@ public class MainActivity extends AppCompatActivity implements TimePickerDialog.
         }
 
     }
+
 
 
 }

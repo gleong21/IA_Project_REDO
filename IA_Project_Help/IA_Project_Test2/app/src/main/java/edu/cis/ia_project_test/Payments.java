@@ -8,6 +8,7 @@ public class Payments
     String year;
     String date;
     String month;
+    boolean isPaid;
 
     public Payments(String id, String name, String amount)
     {
@@ -28,6 +29,17 @@ public class Payments
         this.year = year;
         this.date = date;
         this.month = month;
+    }
+
+    public Payments(String id, String name, String amount, String year, String date, String month, boolean isPaid)
+    {
+        this.id = id;
+        this.name = name;
+        this.amount = amount;
+        this.year = year;
+        this.date = date;
+        this.month = month;
+        this.isPaid = isPaid;
     }
 
 
@@ -89,5 +101,15 @@ public class Payments
     public void setMonth(String month)
     {
         this.month = month;
+    }
+
+    public boolean isPaid()
+    {
+        return isPaid;
+    }
+
+    public void setPaid(boolean paid)
+    {
+        isPaid = paid;
     }
 }

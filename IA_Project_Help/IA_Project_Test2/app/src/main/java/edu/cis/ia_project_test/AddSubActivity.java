@@ -185,7 +185,7 @@ public class AddSubActivity extends AppCompatActivity implements DatePickerDialo
 
         else
         {
-            Payments paymentOne = new Payments("payment" + curNum, name.getText().toString(), amount.getText().toString(), yearOne, monthOne, dateOne);
+            Payments paymentOne = new Payments("payment" + curNum, name.getText().toString(), amount.getText().toString(), yearOne, monthOne, dateOne, false);
             curNum++;
 
             if(paymentsList == null)

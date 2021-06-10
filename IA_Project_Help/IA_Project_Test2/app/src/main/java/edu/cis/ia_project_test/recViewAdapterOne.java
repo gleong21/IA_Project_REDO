@@ -1,6 +1,7 @@
 package edu.cis.ia_project_test;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,19 +66,15 @@ public class recViewAdapterOne extends RecyclerView.Adapter<recViewHolder>
         holder.carName.setText(listingData.get(position).getName());
         holder.seatsLeft.setText(listingData.get(position).getAmount());
         holder.rating.setText("Date:" + listingData.get(position).getDate() + "/" + listingData.get(position).getMonth() + "/" + listingData.get(position).getYear());
-//        holder.getLayout().setOnClickListener(new View.OnClickListener()
-//        {
-//            @Override
-//            public void onClick(View view)
-//            {
-//                Intent intent = new Intent(context, VehicleProfileActivity.class);
-//                intent.putExtra("title", listingData.get(position).get(0));
-//                intent.putExtra("owner", listingData.get(position).get(2));
-//                intent.putExtra("price", listingData.get(position).get((1)));
-//                intent.putExtra("VID", listingData.get(position).get((3)));
-//                context.startActivity(intent);
-//            }
-//        });
+        holder.getLayout().setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                Intent intent = new Intent(context, BillInfoActivity.class);
+                context.startActivity(intent);
+            }
+        });
     }
 
 
