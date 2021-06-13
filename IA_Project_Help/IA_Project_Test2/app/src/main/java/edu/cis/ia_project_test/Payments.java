@@ -9,6 +9,10 @@ public class Payments
     String date;
     String month;
     boolean isPaid;
+    Double longitude;
+    Double latitude;
+    int days;
+
 
     public Payments(String id, String name, String amount)
     {
@@ -40,6 +44,20 @@ public class Payments
         this.date = date;
         this.month = month;
         this.isPaid = isPaid;
+    }
+
+    public Payments(String id, String name, String amount, String year, String date, String month, boolean isPaid, Double longitude, Double latitude, int days)
+    {
+        this.id = id;
+        this.name = name;
+        this.amount = amount;
+        this.year = year;
+        this.date = date;
+        this.month = month;
+        this.isPaid = isPaid;
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.days = days;
     }
 
 
@@ -111,5 +129,36 @@ public class Payments
     public void setPaid(boolean paid)
     {
         isPaid = paid;
+    }
+
+
+    public Double getLongitude()
+    {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude)
+    {
+        this.longitude = longitude;
+    }
+
+    public Double getLatitude()
+    {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude)
+    {
+        this.latitude = latitude;
+    }
+
+    public int getDays()
+    {
+        return days;
+    }
+
+    public void setDays(int days)
+    {
+        this.days = days;
     }
 }
