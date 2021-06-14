@@ -11,6 +11,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Looper;
 import android.text.Html;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,6 +26,9 @@ import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -47,17 +51,19 @@ public class MainActivity extends AppCompatActivity implements TimePickerDialog.
 
     RecyclerView recview;
     FirebaseFirestore firebaseRef;
-    private FirebaseAuth mAuth;
-    private FirebaseUser mUser;
     ArrayList<User> userList;
     ArrayList<Payments> payments;
     Button location;
     TextView textView1, textView2, textView3, textView4, textView5, textView6;
     FusedLocationProviderClient fusedLocationProviderClient;
+    private FirebaseAuth mAuth;
+    private FirebaseUser mUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         BottomNavigationView botView = findViewById(R.id.bottomNav);
@@ -76,7 +82,8 @@ public class MainActivity extends AppCompatActivity implements TimePickerDialog.
             @Override
             public void onClick(View view)
             {
-                if(ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+                if (ActivityCompat.checkSelfPermission(MainActivity.this,
+                        Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
                 {
 
                     fusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>()
@@ -92,14 +99,21 @@ public class MainActivity extends AppCompatActivity implements TimePickerDialog.
                                 Geocoder geocoder = new Geocoder(MainActivity.this, Locale.getDefault());
                                 try
                                 {
-                                    List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                                    List<Address> addresses = geocoder.getFromLocation(location.getLatitude(),
+                                            location.getLongitude(), 1);
                                     System.out.println(addresses.get(0).getCountryName());
                                     textView6.setText("hello");
-                                    textView1.setText(Html.fromHtml("<font color = '#6200EE'><b>Latitude :</b><br></font>"+ (addresses.get(0).getLatitude())));
-                                    textView2.setText(Html.fromHtml("<font color = '#6200EE'><b>Longitude :</b><br></font>"+ String.valueOf(addresses.get(0).getLongitude())));
-                                    textView3.setText(Html.fromHtml("<font color = '#6200EE'><b>Country Name :</b><br></font>"+ String.valueOf(addresses.get(0).getCountryName())));
-                                    textView4.setText(Html.fromHtml("<font color = '#6200EE'><b>Locality :</b><br></font>"+ String.valueOf(addresses.get(0).getLocality())));
-                                    textView5.setText(Html.fromHtml("<font color = '#6200EE'><b>Address :</b><br></font>"+ String.valueOf(addresses.get(0).getAddressLine(0))));
+                                    textView1.setText(Html.fromHtml("<font color = '#6200EE'><b>Latitude " +
+                                            ":</b><br></font>" + (addresses.get(0).getLatitude())));
+                                    textView2.setText(Html.fromHtml("<font color = '#6200EE'><b>Longitude " +
+                                            ":</b><br></font>" + String.valueOf(addresses.get(0).getLongitude())));
+                                    textView3.setText(Html.fromHtml("<font color = '#6200EE'><b>Country Name " +
+                                            ":</b><br></font>" + String.valueOf(addresses.get(0).getCountryName())));
+                                    textView4.setText(Html.fromHtml("<font color = '#6200EE'><b>Locality " +
+                                            ":</b><br></font>" + String.valueOf(addresses.get(0).getLocality())));
+                                    textView5.setText(Html.fromHtml("<font color = '#6200EE'><b>Address " +
+                                            ":</b><br></font>" + String.valueOf(addresses.get(0).getAddressLine(0
+                                    ))));
 
 
                                 } catch (IOException e)
@@ -112,7 +126,8 @@ public class MainActivity extends AppCompatActivity implements TimePickerDialog.
                 }
                 else
                 {
-                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
+                    ActivityCompat.requestPermissions(MainActivity.this,
+                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
 
                 }
             }
@@ -133,11 +148,11 @@ public class MainActivity extends AppCompatActivity implements TimePickerDialog.
                         return true;
                     case R.id.add:
                         startActivity(new Intent(getApplicationContext(), TypeActivity.class));
-                        overridePendingTransition(0,0);
+                        overridePendingTransition(0, 0);
                         return true;
                     case R.id.list:
                         startActivity(new Intent(getApplicationContext(), allSubActivity.class));
-                        overridePendingTransition(0,0);
+                        overridePendingTransition(0, 0);
                         return true;
                 }
                 return false;
@@ -146,9 +161,11 @@ public class MainActivity extends AppCompatActivity implements TimePickerDialog.
 
 
         Button buttonTimePicker = findViewById(R.id.button_timepicker);
-        buttonTimePicker.setOnClickListener(new View.OnClickListener() {
+        buttonTimePicker.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 DialogFragment timePicker = new TimePickerFragment();
                 timePicker.show(getSupportFragmentManager(), "time picker");
             }
@@ -186,6 +203,7 @@ public class MainActivity extends AppCompatActivity implements TimePickerDialog.
                             }
 
                             calc();
+                            notifLocation();
 
 
                         }
@@ -213,17 +231,20 @@ public class MainActivity extends AppCompatActivity implements TimePickerDialog.
         startAlarm(c);
     }
 
-    private void startAlarm(Calendar c) {
+    private void startAlarm(Calendar c)
+    {
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this, AlertReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
-        if (c.before(Calendar.getInstance())) {
+        if (c.before(Calendar.getInstance()))
+        {
             c.add(Calendar.DATE, 1);
         }
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
     }
 
-    private void updateTimeText(Calendar c) {
+    private void updateTimeText(Calendar c)
+    {
         String timeText = "Alarm set for: ";
         timeText += DateFormat.getTimeInstance(DateFormat.SHORT).format(c.getTime());
         TextView mTextView = findViewById(R.id.textView);
@@ -251,7 +272,7 @@ public class MainActivity extends AppCompatActivity implements TimePickerDialog.
 
         try
         {
-            for(int num =0; num<payments.size(); num++)
+            for (int num = 0; num < payments.size(); num++)
             {
                 total += Integer.parseInt(payments.get(num).getAmount());
                 System.out.println(total);
@@ -260,12 +281,60 @@ public class MainActivity extends AppCompatActivity implements TimePickerDialog.
 
             TextView text = findViewById(R.id.textView5);
             text.setText("Amount Due: " + String.valueOf(total));
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
 
         }
 
+    }
+    public void signout(View v)
+    {
+        FirebaseAuth.getInstance().signOut();
+
+    }
+
+    public void notifLocation()
+    {
+        LocationCallback locationCallBack = new LocationCallback()
+        {
+            @Override
+            public void onLocationResult(LocationResult locationResult)
+            {
+                super.onLocationResult(locationResult);
+                if (locationResult != null && locationResult.getLastLocation() != null)
+                {
+                    double lat = locationResult.getLastLocation().getLatitude();
+                    double longTwo = locationResult.getLastLocation().getLongitude();
+                    loctest(longTwo,lat);
+//                    System.out.println(lat);
+                   System.out.println(longTwo + "testing");
+                }
+            }
+        };
+
+        if (ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+        {
+            LocationRequest test = new LocationRequest();
+            test.setInterval(4000);
+            test.setFastestInterval(2000);
+            test.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+            LocationServices.getFusedLocationProviderClient(this).requestLocationUpdates(test,
+                    locationCallBack, Looper.getMainLooper());
+        }
+    }
+
+    public void loctest(Double longit, Double lat)
+    {
+        for(int num=0; num<payments.size(); num++)
+        {
+
+            if((payments.get(num).getLongitude() <= (longit+0.001) && payments.get(num).getLongitude() >= (longit-0.001)) && (payments.get(num).getLatitude() <= (lat+0.001) && payments.get(num).getLatitude() >= (lat-0.001)))
+            {
+                System.out.println("YEEt");
+            }
+        }
     }
 
 

@@ -13,13 +13,15 @@ public class TypeActivity extends AppCompatActivity implements AdapterView.OnIte
 {
 
     String billType;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_type);
-        Spinner spinner = findViewById(R.id.spinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.type, android.R.layout.simple_spinner_item);
+        Spinner spinner = findViewById(R.id.spinner); //initialize the spinner
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.type,
+                android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
@@ -28,17 +30,19 @@ public class TypeActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l)
     {
+        //get the position which the user is on in the spinner
         String text = adapterView.getItemAtPosition(i).toString();
 
         billType = text;
 
-        if(billType.equals("Subscription"))
+        //check which type of payment is selected and lead them to the next page
+        if (billType.equals("Subscription"))
         {
             Intent intent = new Intent(this, AddSubActivity.class);
 
             startActivity(intent);
         }
-        if(billType.equals("Bills"))
+        if (billType.equals("Bills"))
         {
             Intent intent = new Intent(this, AddBillActivity.class);
 

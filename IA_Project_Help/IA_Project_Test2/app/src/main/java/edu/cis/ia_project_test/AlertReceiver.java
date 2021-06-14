@@ -10,6 +10,7 @@ import androidx.core.app.NotificationCompat;
 
 public class AlertReceiver extends BroadcastReceiver
 {
+    //Receive the alert from the AlarmManager and send the notification
     @Override
     public void onReceive(Context context, Intent intent)
     {

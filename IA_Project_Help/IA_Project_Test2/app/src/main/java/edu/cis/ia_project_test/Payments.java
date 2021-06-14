@@ -12,41 +12,11 @@ public class Payments
     Double longitude;
     Double latitude;
     int days;
+    int timesPaid;
+    int average;
 
-
-    public Payments(String id, String name, String amount)
-    {
-        this.id = id;
-        this.name = name;
-        this.amount = amount;
-    }
-
-    public Payments()
-    {
-    }
-
-    public Payments(String id, String name, String amount, String year, String month, String date)
-    {
-        this.id = id;
-        this.name = name;
-        this.amount = amount;
-        this.year = year;
-        this.date = date;
-        this.month = month;
-    }
-
-    public Payments(String id, String name, String amount, String year, String date, String month, boolean isPaid)
-    {
-        this.id = id;
-        this.name = name;
-        this.amount = amount;
-        this.year = year;
-        this.date = date;
-        this.month = month;
-        this.isPaid = isPaid;
-    }
-
-    public Payments(String id, String name, String amount, String year, String date, String month, boolean isPaid, Double longitude, Double latitude, int days)
+    public Payments(String id, String name, String amount, String year, String date, String month, boolean isPaid,
+                    Double longitude, Double latitude, int days, int times, int avg)
     {
         this.id = id;
         this.name = name;
@@ -58,6 +28,20 @@ public class Payments
         this.longitude = longitude;
         this.latitude = latitude;
         this.days = days;
+        this.timesPaid = times;
+        this.average = avg;
+    }
+
+    public Payments()
+    {
+    }
+
+
+    public Payments(String id, String name, String amount)
+    {
+        this.id = id;
+        this.name = name;
+        this.amount = amount;
     }
 
 
@@ -160,5 +144,25 @@ public class Payments
     public void setDays(int days)
     {
         this.days = days;
+    }
+
+    public int getTimesPaid()
+    {
+        return timesPaid;
+    }
+
+    public void setTimesPaid(int timesPaid)
+    {
+        this.timesPaid = timesPaid;
+    }
+
+    public int getAverage()
+    {
+        return average;
+    }
+
+    public void setAverage(int average)
+    {
+        this.average = average;
     }
 }

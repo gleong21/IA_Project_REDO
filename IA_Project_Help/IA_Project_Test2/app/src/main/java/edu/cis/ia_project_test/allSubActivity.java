@@ -25,10 +25,11 @@ public class allSubActivity extends AppCompatActivity
 
     RecyclerView recview;
     FirebaseFirestore firebaseRef;
-    private FirebaseAuth mAuth;
-    private FirebaseUser mUser;
     ArrayList<User> userList;
     ArrayList<Payments> payments;
+    private FirebaseAuth mAuth;
+    private FirebaseUser mUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -38,7 +39,7 @@ public class allSubActivity extends AppCompatActivity
         mAuth = FirebaseAuth.getInstance();
         firebaseRef = FirebaseFirestore.getInstance();
         payments = new ArrayList<>();
-        firebaseRef.collection("Users")
+        firebaseRef.collection("Users") //retrieve information from the database
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>()
                 {
@@ -53,25 +54,18 @@ public class allSubActivity extends AppCompatActivity
                                 ArrayList<Payments> currList = new ArrayList<>();
 
                                 User v = document.toObject(User.class);
-//                                System.out.println("HELOO");
-//                                System.out.println(v.getUid());
-                                if (checkUser(v.getUid()))
+                                if (checkUser(v.getUid())) //if the current user matches the userID in the data base,
+                                    // take that information
                                 {
-                                    System.out.println(v.getUid());
-
                                     currList = v.getPayments();
-                                    updateArrayList(currList);
-//                                    System.out.println(currList);
-
+                                    updateArrayList(currList); //update the arrayList that is going to be sent to the
+                                    // recyclerViewAdapter
                                     break;
                                 }
                             }
-
                             createRecview();
 
                         }
-
-
 
                         else
                         {
@@ -79,9 +73,6 @@ public class allSubActivity extends AppCompatActivity
                         }
                     }
                 });
-        System.out.println(mAuth.getUid() + "YEEEEEEWEWEEEEEE");
-        System.out.println(payments);
-
         BottomNavigationView botView = findViewById(R.id.bottomNav);
         botView.setSelectedItemId(R.id.add);
 
@@ -94,11 +85,11 @@ public class allSubActivity extends AppCompatActivity
                 {
                     case R.id.home:
                         startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                        overridePendingTransition(0,0);
+                        overridePendingTransition(0, 0);
                         return true;
                     case R.id.add:
                         startActivity(new Intent(getApplicationContext(), TypeActivity.class));
-                        overridePendingTransition(0,0);
+                        overridePendingTransition(0, 0);
                         return true;
                     case R.id.list:
                         return true;
@@ -108,18 +99,18 @@ public class allSubActivity extends AppCompatActivity
         });
     }
 
+
     public void createRecview()
     {
-
+        //initialize the recyclerView adapter and send the arrayList to the adapter.
         recViewAdapterOne newAdapter = new recViewAdapterOne(payments, this);
-
         recview.setAdapter(newAdapter);
         recview.setLayoutManager(new LinearLayoutManager(this));
     }
 
     public void updateArrayList(ArrayList<Payments> newOne)
     {
-        if(newOne == null)
+        if (newOne == null)
         {
             payments = new ArrayList<>();
         }

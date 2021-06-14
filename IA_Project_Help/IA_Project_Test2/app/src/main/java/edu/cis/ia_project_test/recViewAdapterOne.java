@@ -63,9 +63,10 @@ public class recViewAdapterOne extends RecyclerView.Adapter<recViewHolder>
     public void onBindViewHolder(@NonNull recViewHolder holder, final int position)
     {
 
-        holder.carName.setText(listingData.get(position).getName());
-        holder.seatsLeft.setText(listingData.get(position).getAmount());
-        holder.rating.setText("Date:" + listingData.get(position).getDate() + "/" + listingData.get(position).getMonth() + "/" + listingData.get(position).getYear());
+        holder.name.setText(listingData.get(position).getName());
+        holder.amount.setText(listingData.get(position).getAmount());
+        holder.date.setText("Date:" + listingData.get(position).getDate() + "/" +
+                listingData.get(position).getMonth() + "/" + listingData.get(position).getYear());
         holder.getLayout().setOnClickListener(new View.OnClickListener()
         {
             @Override
