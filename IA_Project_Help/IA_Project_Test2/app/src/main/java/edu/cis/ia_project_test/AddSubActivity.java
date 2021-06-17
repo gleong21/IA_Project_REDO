@@ -30,8 +30,11 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 public class AddSubActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener
 {
@@ -52,6 +55,7 @@ public class AddSubActivity extends AppCompatActivity implements DatePickerDialo
     ArrayList<Payments> secondArrayPay;
     ArrayList<Payments> paymentsList;
     int curNum = 0;
+    String currentDate;
     private NotificationManagerCompat notificationManager;
 
     @Override
@@ -66,6 +70,8 @@ public class AddSubActivity extends AppCompatActivity implements DatePickerDialo
         mAuth = FirebaseAuth.getInstance();
         BottomNavigationView botView = findViewById(R.id.bottomNav);
         botView.setSelectedItemId(R.id.add);
+        TextView textView = findViewById(R.id.textView4);
+
 
         botView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener()
         {
@@ -120,15 +126,12 @@ public class AddSubActivity extends AppCompatActivity implements DatePickerDialo
                                         new ArrayList<>();
 
                                 User v = document.toObject(User.class);
-//                                System.out.println("HELOO");
-//                                System.out.println(v.getUid());
                                 if (checkUser(v.getUid()))
                                 {
                                     System.out.println(v.getUid());
 
                                     currList = v.getPayments();
                                     updateArrayList(currList);
-//                                    System.out.println(currList);
 
                                     break;
                                 }
@@ -171,12 +174,14 @@ public class AddSubActivity extends AppCompatActivity implements DatePickerDialo
 
     public void writeData(View v)
     {
-        if (yearOne == null) //If the user has not chosen a date
+
+        if (yearOne == null || name.getText().toString() == null || amount.getText().toString() == null)//If the user has not filled in the fields correctly
         {
-            Toast messageToUser = Toast.makeText(this, "Please choose a date",
+            Toast messageToUser = Toast.makeText(this, "Please fill in fields correctly",
                     Toast.LENGTH_LONG);
             messageToUser.show();
         }
+
         else
         {
             //Create payments object that will be added into the arrayList.  Since not all fields are decided from
@@ -202,6 +207,7 @@ public class AddSubActivity extends AppCompatActivity implements DatePickerDialo
             }
             else
             {
+
                 paymentsList.add(paymentOne); //If the user already has subs from before, add it on the arrayList and
                 // update the field
                 firestoreRef.collection("Users").document(mAuth.getUid()).update("payments",
@@ -283,6 +289,7 @@ public class AddSubActivity extends AppCompatActivity implements DatePickerDialo
         alarmManager.setExact(AlarmManager.RTC_WAKEUP,
                 calendar.getTimeInMillis(), pendingIntent);
     }
+
 
 
 }

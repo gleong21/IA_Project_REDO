@@ -92,7 +92,6 @@ public class recViewHolder extends RecyclerView.ViewHolder
                                     Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
                             {
 
-                                int finalNum = num;
                                 fusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>()
                                 {
                                     @Override
@@ -114,6 +113,9 @@ public class recViewHolder extends RecyclerView.ViewHolder
                                                         addresses.get(0).getLongitude();
                                                 latitude =
                                                         addresses.get(0).getLatitude();
+                                                System.out.println(latitude);
+                                                System.out.println(longitude);
+
 
                                                 setLongitude();
                                             } catch (IOException e)
@@ -132,7 +134,7 @@ public class recViewHolder extends RecyclerView.ViewHolder
 
                             }
                             checkTime();
-                            notifTest();
+                            notifTestTimeAvg();
                             notifLocation();
 
                         }
@@ -195,10 +197,10 @@ public class recViewHolder extends RecyclerView.ViewHolder
         long numberOfDays = 0;
         try
         {
-            startDate = dateFormat.parse(start);
-            endDate = dateFormat.parse(end);
+            startDate = dateFormat.parse(start); //format the current date
+            endDate = dateFormat.parse(end); //format the due date
             numberOfDays = getUnitBetweenDates(startDate, endDate,
-                    TimeUnit.DAYS);
+                    TimeUnit.DAYS); //find the number of days in between the two
         } catch (ParseException e)
         {
             e.printStackTrace();
@@ -209,8 +211,8 @@ public class recViewHolder extends RecyclerView.ViewHolder
     private static long getUnitBetweenDates(Date startDate, Date endDate,
                                             TimeUnit unit)
     {
-        long timeDiff = endDate.getTime() - startDate.getTime();
-        return unit.convert(timeDiff, TimeUnit.MILLISECONDS);
+        long timeDiff = endDate.getTime() - startDate.getTime(); //find the difference
+        return unit.convert(timeDiff, TimeUnit.MILLISECONDS); //convert back to milliseconds
     }
 
     public ConstraintLayout getLayout()
@@ -248,6 +250,8 @@ public class recViewHolder extends RecyclerView.ViewHolder
             {
                 paymentsList.get(numOne).setLatitude(latitude);
                 paymentsList.get(numOne).setLongitude(longitude);
+
+
                 paymentsList.get(numOne).setPaid(true);
 
 
@@ -287,6 +291,8 @@ public class recViewHolder extends RecyclerView.ViewHolder
 
                 paymentsList.get(numOne).setDays(days + all);
                 findAverage();
+                firestoreRef.collection("Users").document(mAuth.getUid()).update("payments",
+                        paymentsList);
 
             }
         }
@@ -298,9 +304,10 @@ public class recViewHolder extends RecyclerView.ViewHolder
         String checker = (String) name.getText();
         for (int numOne = 0; numOne < paymentsList.size(); numOne++)
         {
-            if (paymentsList.get(numOne).getName().equals(checker))
+            if (paymentsList.get(numOne).getName().equals(checker)) //to find the payment which the user is
+                // interacting with
             {
-                if (paymentsList.get(numOne).getTimesPaid() == 0)
+                if (paymentsList.get(numOne).getTimesPaid() == 0) //if the user has never paid this payment before
                 {
                     paymentsList.get(numOne).setAverage(paymentsList.get(numOne).getDays());
                     paymentsList.get(numOne).setTimesPaid(1);
@@ -310,8 +317,8 @@ public class recViewHolder extends RecyclerView.ViewHolder
                 {
                     paymentsList.get(numOne).setTimesPaid(paymentsList.get(numOne).getTimesPaid() + 1);
                     int avg =
-                            paymentsList.get(numOne).getDays() / paymentsList.get(numOne).getTimesPaid();
-                    System.out.println(avg);
+                            paymentsList.get(numOne).getDays() / paymentsList.get(numOne).getTimesPaid(); //find the
+                    // average
                     paymentsList.get(numOne).setAverage(avg);
 
 
@@ -374,7 +381,7 @@ public class recViewHolder extends RecyclerView.ViewHolder
 
     }
 
-    public void notifTest()
+    public void notifTestTimeAvg()
     {
 
         String checker = (String) name.getText();

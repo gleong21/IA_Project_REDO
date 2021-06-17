@@ -65,7 +65,7 @@ public class recViewAdapterOne extends RecyclerView.Adapter<recViewHolder>
 
         holder.name.setText(listingData.get(position).getName());
         holder.amount.setText(listingData.get(position).getAmount());
-        holder.date.setText("Date:" + listingData.get(position).getDate() + "/" +
+        holder.date.setText("Date:" + (Integer.parseInt(listingData.get(position).getDate()) + 1) + "/" +
                 listingData.get(position).getMonth() + "/" + listingData.get(position).getYear());
         holder.getLayout().setOnClickListener(new View.OnClickListener()
         {
